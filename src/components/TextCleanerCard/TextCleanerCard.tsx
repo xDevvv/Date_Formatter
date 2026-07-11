@@ -1,6 +1,9 @@
+import { StatusFooter } from '../common/StatusFooter';
+import { LoadingButton } from '../common/LoadingButton';
 import { InputToolbar } from '../common/InputToolbar';
+import { OutputArea } from '../common/OutputArea';
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Clipboard, Trash2, Check, Loader2 } from 'lucide-react';
+import { TextInputArea } from './TextInputArea';
 
 interface TextCleanerCardProps {
   showToast: (msg: string) => void;
@@ -124,47 +127,38 @@ export const TextCleanerCard: React.FC<TextCleanerCardProps> = ({ showToast }) =
           disableClear={!textInput}
         />
 
-        <div 
-          className={`relative rounded-xl border-2 transition-all ${isTextDragActive ? 'border-blue-500 bg-blue-50/30' : 'border-slate-200 dark:border-slate-800'}`}
+
+
+        <TextInputArea
+          id="text-input-area"
+          value={textInput}
+          placeholder={`Example: PASU 9099-2012-21`}
+          onChange={setTextInput}
+          enableDragDrop
+          isDragActive={isTextDragActive}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-        >
-          <textarea
-            id="text-input-area"
-            className="w-full h-44 bg-transparent p-4 font-mono text-sm text-slate-800 dark:text-slate-200 focus:outline-none resize-none"
-            placeholder={`PASU 9099-2012-21\nPASU 1234-5678-90`}
-            value={textInput}
-            onChange={(e) => setTextInput(e.target.value)}
-          />
-        </div>
+        />
 
-        <button
+        <LoadingButton
+          label="Remove Spaces & Dashes"
+          loading={isTextLoading}
+          disabled={!textInput}
           onClick={handleTextProcess}
-          disabled={!textInput || isTextLoading}
-          className="w-full mt-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 dark:disabled:bg-slate-800 text-white font-medium py-2.5 px-4 rounded-xl flex items-center justify-center gap-2"
-        >
-          {isTextLoading ? <Loader2 size={16} className="animate-spin" /> : 'Remove Spaces & Dashes'}
-        </button>
+        />
 
-        <div className="mt-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Cleaned Output</span>
-            <button onClick={handleCopy} disabled={!textOutput} className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 text-xs font-medium disabled:opacity-40">
-              <Clipboard size={12} /> Copy Result
-            </button>
-          </div>
-          <textarea readOnly className="w-full h-44 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 font-mono text-sm text-slate-700 dark:text-slate-300 resize-none" value={textOutput} />
-        </div>
+        <OutputArea
+          title="Cleaned Output"
+          value={textOutput}
+          onCopy={handleCopy}
+        />
       </div>
 
-      <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 min-h-[32px] flex items-center">
-        {textProcessedLines !== null && textInput && (
-          <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-            <Check size={14} /> ✓ {textProcessedLines} lines processed successfully
-          </p>
-        )}
-      </div>
+      <StatusFooter
+        show={textProcessedLines !== null && !!textInput}
+        message={`✓ ${textProcessedLines} lines processed successfully`}
+      />
     </section>
   );
 };
