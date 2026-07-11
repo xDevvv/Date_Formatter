@@ -1,8 +1,11 @@
+import { StatusFooter } from './common/StatusFooter';
 import { InputToolbar } from './common/InputToolbar';
 import React, { useState, useEffect, useMemo } from 'react';
-import { Clipboard, Trash2, Check, Loader2 } from 'lucide-react';
+import { TextInputArea } from './TextCleanerCard/TextInputArea';
 import { parseAndFormatDate } from './utils/dateHelpers';
 import type { InputDateFormat, OutputDateFormat } from './utils/dateHelpers';
+import { OutputArea } from './common/OutputArea';
+import { LoadingButton } from './common/LoadingButton';
 
 
 interface DateFormatterCardProps {
@@ -90,13 +93,13 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
           disableClear={!dateInput}
         />
 
-        <textarea
-          id="date-input-area"
-          className="w-full h-24 bg-transparent p-4 border border-slate-200 dark:border-slate-800 rounded-xl font-mono text-sm text-slate-800 dark:text-slate-200 focus:outline-none resize-none"
-          placeholder={`Jan-21-2026\nFeb-15-2025`}
-          value={dateInput}
-          onChange={(e) => setDateInput(e.target.value)}
-        />
+        <TextInputArea
+            id="date-input-area"
+            value={dateInput}
+            placeholder={`Example: Jan-21-2026`}
+            onChange={setDateInput}
+            rows={6}
+          />
 
         <div className="grid grid-cols-2 gap-3 mt-4">
           <div className="flex flex-col gap-1.5">
@@ -121,28 +124,24 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
           </div>
         </div>
 
-        <button onClick={handleDateProcess} disabled={!dateInput || isDateLoading} className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-xl flex items-center justify-center gap-2">
-          {isDateLoading ? <Loader2 size={16} className="animate-spin" /> : 'Convert Dates'}
-        </button>
-
-        <div className="mt-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Formatted Dates</span>
-            <button onClick={handleCopy} disabled={!dateOutput} className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 text-xs font-medium disabled:opacity-40">
-              <Clipboard size={12} /> Copy Result
-            </button>
-          </div>
-          <textarea readOnly className="w-full h-44 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 font-mono text-sm text-slate-700 dark:text-slate-300 resize-none" value={dateOutput} />
-        </div>
+        <LoadingButton
+          label="Convert Dates"
+          loading={isDateLoading}
+          disabled={!dateInput}
+          onClick={handleDateProcess}
+        />
       </div>
+      
+      <OutputArea
+        title="Formatted Dates"
+        value={dateOutput}
+        onCopy={handleCopy}
+      />
 
-      <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 min-h-[32px] flex items-center">
-        {dateProcessedCount !== null && dateInput && (
-          <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-            <Check size={14} /> ✓ {dateProcessedCount} dates converted successfully
-          </p>
-        )}
-      </div>
+      <StatusFooter
+        show={dateProcessedCount !== null && !!dateInput}
+        message={`✓ ${dateProcessedCount} dates converted successfully`}
+      />
     </section>
   );
 };
