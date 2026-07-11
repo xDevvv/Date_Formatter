@@ -1,7 +1,9 @@
+import { InputToolbar } from './common/InputToolbar';
 import React, { useState, useEffect, useMemo } from 'react';
 import { Clipboard, Trash2, Check, Loader2 } from 'lucide-react';
 import { parseAndFormatDate } from './utils/dateHelpers';
 import type { InputDateFormat, OutputDateFormat } from './utils/dateHelpers';
+
 
 interface DateFormatterCardProps {
   showToast: (msg: string) => void;
@@ -81,25 +83,12 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
           </p>
         </div>
 
-        <div className="flex items-center justify-between mb-2 text-xs">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Input</span>
-            <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-mono text-slate-600 dark:text-slate-400">
-              Lines: {lineCount}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <button onClick={handlePaste} className="flex items-center gap-1 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-800 font-medium text-slate-600 dark:text-slate-300 transition-all">
-              <Clipboard size={12} /> Paste
-            </button>
-            <button onClick={handleCopy} disabled={!dateOutput} className="flex items-center gap-1 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-800 font-medium text-slate-600 dark:text-slate-300 transition-all">
-              <Clipboard size={12} /> Copy
-            </button>
-            <button onClick={handleClear} disabled={!dateInput} className="flex items-center gap-1 px-2.5 py-1 text-red-600 dark:text-red-400 font-medium disabled:opacity-45">
-              <Trash2 size={12} /> Clear
-            </button>
-          </div>
-        </div>
+        <InputToolbar
+          lineCount={lineCount}
+          onPaste={handlePaste}
+          onClear={handleClear}
+          disableClear={!dateInput}
+        />
 
         <textarea
           id="date-input-area"
