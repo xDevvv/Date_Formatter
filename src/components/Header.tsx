@@ -1,12 +1,5 @@
-import React from 'react';
-import { Sun, Moon } from 'lucide-react';
 
-interface HeaderProps {
-  isDarkMode: boolean;
-  onToggleTheme: () => void;
-}
-
-export const Header: React.FC<HeaderProps> = () => (
+export const Header = () => (
   <header className="relative flex flex-col items-center text-center mb-12">
     
     <div className="text-4xl mb-3 animate-pulse">📅</div>

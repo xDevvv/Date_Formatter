@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { Header } from './components/Header';
 import { TextCleanerCard } from './components/TextCleanerCard/';
 import { DateFormatterCard } from './components/DateFormatterCard';
 import { SupportedFormatsFooter } from './components/SupportedFormatsFooter';
@@ -21,6 +21,7 @@ export default function App() {
       )}
 
       <div className="max-w-7xl mx-auto px-4 py-12 md:px-8">
+        <Header />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <TextCleanerCard showToast={showToast} />
           <DateFormatterCard showToast={showToast} />
