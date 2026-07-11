@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Header } from './components/Header';
 import { TextCleanerCard } from './components/TextCleanerCard/';
-import { DateFormatterCard } from './components/DateFormatter.card';
+import { DateFormatterCard } from './components/DateFormatterCard';
 import { SupportedFormatsFooter } from './components/SupportedFormatsFooter';
 
 export default function App() {
