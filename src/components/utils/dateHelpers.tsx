@@ -25,8 +25,38 @@ const MONTHS_LONG = [
 
 const pad = (num: number) => String(num).padStart(2, '0');
 
+const ensureTimeColon = (time: string): string => {
+  const clean = time.trim();
 
-function createDate(parts: string[], format: InputDateFormat): Date | null {
+  if (clean.includes(':') || isNaN(Number(clean))) {
+    return clean;
+  }
+
+  switch (clean.length) {
+    case 4:
+      return `${clean.slice(0, 2)}:${clean.slice(2)}`;
+
+    case 3:
+      return `0${clean[0]}:${clean.slice(1)}`;
+
+    default:
+      return clean;
+  }
+};
+
+const tryParseDate = (value: string): Date | null => {
+  const timestamp = Date.parse(value);
+
+  return isNaN(timestamp)
+    ? null
+    : new Date(timestamp);
+};
+
+const createDate = (
+  parts: string[],
+  format: InputDateFormat
+): Date | null => {
+
   const values = parts.map(Number);
 
   switch (format) {
@@ -42,13 +72,38 @@ function createDate(parts: string[], format: InputDateFormat): Date | null {
     default:
       return null;
   }
-}
+};
 
-function tryParseDate(value: string): Date | null {
-  const timestamp = Date.parse(value);
+const formatDate = (
+  date: Date,
+  outputFormat: OutputDateFormat
+): string => {
 
-  return isNaN(timestamp) ? null : new Date(timestamp);
-}
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  switch (outputFormat) {
+
+    case 'M/D/YY':
+      return `${month + 1}/${day}/${String(year).slice(-2)}`;
+
+    case 'MM/DD/YYYY':
+      return `${pad(month + 1)}/${pad(day)}/${year}`;
+
+    case 'YYYY-MM-DD':
+      return `${year}-${pad(month + 1)}-${pad(day)}`;
+
+    case 'DD-MMM-YYYY':
+      return `${pad(day)}-${MONTHS_SHORT[month]}-${year}`;
+
+    case 'Month DD, YYYY':
+      return `${MONTHS_LONG[month]} ${day}, ${year}`;
+
+    default:
+      return date.toLocaleDateString();
+  }
+};
 
 export const parseAndFormatDate = (
   dateTimeStr: string,
@@ -58,67 +113,39 @@ export const parseAndFormatDate = (
 
   const trimmed = dateTimeStr.trim();
 
-  if (!trimmed) return '';
-
-  // Separate date and time
-  const spaceIndex = trimmed.indexOf(' ');
-  let datePart = trimmed;
-  let timePart = '';
-
-  if (spaceIndex !== -1) {
-    datePart = trimmed.substring(0, spaceIndex).trim();
-    timePart = trimmed.substring(spaceIndex + 1).trim();
+  if (!trimmed) {
+    return '';
   }
+
+  const [datePart, rawTime = ''] = trimmed.split(/\s+/, 2);
+  const timePart = ensureTimeColon(rawTime);
 
   let date: Date | null = null;
 
   if (inputFormat === 'Auto Detect') {
+
     date =
       tryParseDate(datePart) ??
       tryParseDate(datePart.replace(/-/g, ' '));
+
   } else {
+
     const parts = datePart.split(/[-/]/);
 
-    if (parts.length === 3)  date = createDate(parts, inputFormat);
-    
-    if (!date || isNaN(date.getTime())) date = tryParseDate(datePart);
+    if (parts.length === 3) {
+      date = createDate(parts, inputFormat);
+    }
+
+    date ??= tryParseDate(datePart);
   }
 
   if (!date || isNaN(date.getTime())) {
     return `${trimmed} -> [Invalid Date]`;
   }
 
-  const day = date.getDate();
-  const month = date.getMonth();
-  const year = date.getFullYear();
+  const formattedDate = formatDate(date, outputFormat);
 
-  let formattedDate = '';
-
-  switch (outputFormat) {
-    case 'M/D/YY':
-      formattedDate = `${month + 1}/${day}/${String(year).slice(-2)}`;
-      break;
-
-    case 'MM/DD/YYYY':
-      formattedDate = `${pad(month + 1)}/${pad(day)}/${year}`;
-      break;
-
-    case 'YYYY-MM-DD':
-      formattedDate = `${year}-${pad(month + 1)}-${pad(day)}`;
-      break;
-
-    case 'DD-MMM-YYYY':
-      formattedDate = `${pad(day)}-${MONTHS_SHORT[month]}-${year}`;
-      break;
-
-    case 'Month DD, YYYY':
-      formattedDate = `${MONTHS_LONG[month]} ${day}, ${year}`;
-      break;
-
-    default:
-      formattedDate = date.toLocaleDateString();
-  }
-
-  // Re-attach the original time if present
-  return timePart ? `${formattedDate} ${timePart}` : formattedDate;
+  return timePart
+    ? `${formattedDate} ${timePart}`
+    : formattedDate;
 };

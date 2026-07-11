@@ -96,7 +96,7 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
         <TextInputArea
             id="date-input-area"
             value={dateInput}
-            placeholder={`Example: Jan-21-2026`}
+            placeholder={`Example: Jan-21-2026 1212`}
             onChange={setDateInput}
             rows={6}
           />
