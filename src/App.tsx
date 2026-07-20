@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Header } from './components/Header';
-import { TextCleanerCard } from './components/TextCleanerCard/';
+import { Header } from './components/common/Header';
+import { TextCleanerCard } from './components/TextCleanerCard';
 import { DateFormatterCard } from './components/DateFormatterCard';
-import { SupportedFormatsFooter } from './components/SupportedFormatsFooter';
+import { SupportedFormatsFooter } from './components/common/SupportedFormatsFooter';
 import { JoinLinesCard } from "./components/JoinLinesCard";
 
 export default function App() {

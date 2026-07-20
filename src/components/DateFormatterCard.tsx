@@ -1,7 +1,7 @@
 import { StatusFooter } from './common/StatusFooter';
 import { InputToolbar } from './common/InputToolbar';
 import React, { useState, useEffect, useMemo } from 'react';
-import { TextInputArea } from './TextCleanerCard/TextInputArea';
+import { TextInputArea } from './common/TextInputArea';
 import { parseAndFormatDate } from './utils/dateHelpers';
 import type { InputDateFormat, OutputDateFormat } from './utils/dateHelpers';
 import { OutputArea } from './common/OutputArea';

@@ -3,7 +3,7 @@ import { InputToolbar } from "./common/InputToolbar";
 import { OutputArea } from "./common/OutputArea";
 import { StatusFooter } from "./common/StatusFooter";
 import { LoadingButton } from "./common/LoadingButton";
-import { TextInputArea } from "./TextCleanerCard/TextInputArea";
+import { TextInputArea } from "./common/TextInputArea";
 
 interface JoinLinesCardProps {
   showToast: (msg: string) => void;
