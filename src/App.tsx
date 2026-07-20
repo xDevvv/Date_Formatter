@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { TextCleanerCard } from './components/TextCleanerCard/';
 import { DateFormatterCard } from './components/DateFormatterCard';
 import { SupportedFormatsFooter } from './components/SupportedFormatsFooter';
+import { JoinLinesCard } from "./components/JoinLinesCard";
 
 export default function App() {
   const [toast, setToast] = useState({ message: '', visible: false });
@@ -25,6 +26,7 @@ export default function App() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <TextCleanerCard showToast={showToast} />
           <DateFormatterCard showToast={showToast} />
+          <JoinLinesCard showToast={showToast} />
         </div>
         <SupportedFormatsFooter />
       </div>
