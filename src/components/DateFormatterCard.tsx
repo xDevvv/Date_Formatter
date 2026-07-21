@@ -77,7 +77,7 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
 };
 
   return (
-    <section className="dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
+    <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
       <div>
         <div className="flex flex-col gap-1 mb-6">
           <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Date Format Converter</h2>
