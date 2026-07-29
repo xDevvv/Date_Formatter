@@ -1,0 +1,81 @@
+import React from 'react';
+import { Clipboard } from 'lucide-react';
+
+interface DateResult {
+  date: string;
+  time: string;
+}
+
+interface DateOutputAreaProps {
+  title: string;
+  value: DateResult[];
+  onCopyDate: () => void;
+  onCopyTime: () => void;
+}
+
+export const DateAndTimeOutpurArea: React.FC<DateOutputAreaProps> = ({
+  title,
+  value,
+  onCopyDate,
+  onCopyTime,
+}) => {
+  return (
+    <div className="mt-6">
+      <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        {title}
+      </span>
+
+      <div className="grid grid-cols-2 gap-4 mt-2">
+
+        {/* Date Column */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold text-slate-500">
+              Date
+            </span>
+
+            <button
+              onClick={onCopyDate}
+              disabled={!value.length}
+              className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 text-xs font-medium disabled:opacity-40"
+            >
+              <Clipboard size={12} />
+              Copy Result
+            </button>
+          </div>
+
+          <textarea
+            readOnly
+            value={value.map(v => v.date).join('\n')}
+            className="w-full h-44 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 font-mono text-sm resize-none"
+          />
+        </div>
+
+        {/* Time Column */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold text-slate-500">
+              Time
+            </span>
+
+            <button
+              onClick={onCopyTime}
+              disabled={!value.length}
+              className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 text-xs font-medium disabled:opacity-40"
+            >
+              <Clipboard size={12} />
+              Copy Result
+            </button>
+          </div>
+
+          <textarea
+            readOnly
+            value={value.map(v => v.time).join('\n')}
+            className="w-full h-44 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 font-mono text-sm resize-none"
+          />
+        </div>
+
+      </div>
+    </div>
+  );
+};
