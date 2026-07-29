@@ -33,17 +33,19 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
   const [isDateLoading, setIsDateLoading] = useState(false);
   const [dateProcessedCount, setDateProcessedCount] = useState<number | null>(null);
 
-  const handleDateProcess = () => {
-    if (!dateInput.trim()) return;
-    setIsDateLoading(true);
-    setTimeout(() => {
-      const lines = dateInput.split('\n');
-      const processed = lines.map(line => line.trim() ? parseAndFormatDate(line, inputFormat, outputFormat) : '');
-      setDateOutput(processed.join('\n'));
-      setDateProcessedCount(lines.filter(l => l.trim().length > 0).length);
-      setIsDateLoading(false);
-    }, 300);
-  };
+  const handleDateProcess = useMemo(() => {
+    return () => {
+      if (!dateInput.trim()) return;
+      setIsDateLoading(true);
+      setTimeout(() => {
+        const lines = dateInput.split('\n');
+        const processed = lines.map(line => line.trim() ? parseAndFormatDate(line, inputFormat, outputFormat) : '');
+        setDateOutput(processed.join('\n'));
+        setDateProcessedCount(lines.filter(l => l.trim().length > 0).length);
+        setIsDateLoading(false);
+      }, 300);
+    };
+  }, [dateInput, inputFormat, outputFormat]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -53,7 +55,7 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [dateInput, inputFormat, outputFormat]);
+  }, [handleDateProcess]);
 
   const lineCount = useMemo(
     () => dateInput.split('\n').filter(line => line.trim()).length,

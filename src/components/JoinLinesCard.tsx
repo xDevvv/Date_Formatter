@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { InputToolbar } from "./common/InputToolbar";
 import { OutputArea } from "./common/OutputArea";
 import { StatusFooter } from "./common/StatusFooter";
@@ -26,7 +26,7 @@ export const JoinLinesCard: React.FC<JoinLinesCardProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [processedCount, setProcessedCount] = useState<number | null>(null);
 
-  const handleJoin = () => {
+  const handleJoin = useCallback(() => {
     if (!joinInput.trim()) return;
 
     setIsLoading(true);
@@ -34,7 +34,7 @@ export const JoinLinesCard: React.FC<JoinLinesCardProps> = ({
     setTimeout(() => {
       const lines = joinInput
         .split("\n")
-        .map(line => line.trim())
+        .map((line) => line.trim())
         .filter(Boolean);
 
       setJoinOutput(lines.join(separator));
@@ -42,7 +42,7 @@ export const JoinLinesCard: React.FC<JoinLinesCardProps> = ({
 
       setIsLoading(false);
     }, 300);
-  };
+  }, [joinInput, separator]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -58,7 +58,7 @@ export const JoinLinesCard: React.FC<JoinLinesCardProps> = ({
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [joinInput, separator]);
+  }, [handleJoin]);
 
   const lineCount = useMemo(
     () => joinInput.split("\n").filter(line => line.trim()).length,

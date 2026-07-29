@@ -27,7 +27,7 @@ export const TextCleanerCard: React.FC<TextCleanerCardProps> = ({ showToast }) =
       .length;
   }, [textOutput]);
   
- const handleTextProcess = async () => {
+ const handleTextProcess = useCallback(async () => {
     if (!textInput.trim()) return;
 
     setIsTextLoading(true);
@@ -45,7 +45,7 @@ export const TextCleanerCard: React.FC<TextCleanerCardProps> = ({ showToast }) =
     } finally {
       setIsTextLoading(false);
     }
-  };
+  }, [textInput]);
 
   const handleClear = useCallback(() => {
     setTextInput('');
@@ -81,7 +81,7 @@ export const TextCleanerCard: React.FC<TextCleanerCardProps> = ({ showToast }) =
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [textInput]);
+  }, [handleTextProcess]);
 
   const lineCount = useMemo(
     () => textInput.split('\n').filter(line => line.trim()).length,
