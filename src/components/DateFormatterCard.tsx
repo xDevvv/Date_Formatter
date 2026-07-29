@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { TextInputArea } from './common/TextInputArea';
 import { parseAndFormatDate } from './utils/dateHelpers';
 import type { InputDateFormat, OutputDateFormat } from './utils/dateHelpers';
-import { OutputArea } from './common/OutputArea';
+import { DateAndTimeOutpurArea } from './common/DateAndTimeOutpurArea';
 import { LoadingButton } from './common/LoadingButton';
 
 
@@ -27,7 +27,7 @@ const INPUT_FORMATS_NO_AUTO = INPUT_FORMATS.filter(
 
 export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast }) => {
   const [dateInput, setDateInput] = useState('');
-  const [dateOutput, setDateOutput] = useState('');
+  const [dateOutput, setDateOutput] = useState<{ date: string; time: string }[]>([]);
   const [inputFormat, setInputFormat] = useState<InputDateFormat>('Auto Detect');
   const [outputFormat, setOutputFormat] = useState<OutputDateFormat>('MM/DD/YYYY');
   const [isDateLoading, setIsDateLoading] = useState(false);
@@ -39,8 +39,16 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
       setIsDateLoading(true);
       setTimeout(() => {
         const lines = dateInput.split('\n');
-        const processed = lines.map(line => line.trim() ? parseAndFormatDate(line, inputFormat, outputFormat) : '');
-        setDateOutput(processed.join('\n'));
+        const processed = lines.filter(line => line.trim()).map(line => {
+            const result = parseAndFormatDate(line, inputFormat, outputFormat);
+            return {
+                date: result.date,
+                time: result.time
+            };
+        });
+
+        // const processed = lines.map(line => line.trim() ? parseAndFormatDate(line, inputFormat, outputFormat) : '');
+        setDateOutput(processed);
         setDateProcessedCount(lines.filter(l => l.trim().length > 0).length);
         setIsDateLoading(false);
       }, 300);
@@ -67,16 +75,27 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
     setDateInput(text);
   };
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(dateOutput);
-    showToast("✓ Copied converted dates!");
-  };
-
   const handleClear = () => {
     setDateInput('');
-    setDateOutput('');
+    setDateOutput([]);
     setDateProcessedCount(null);
-};
+  };
+
+  const handleCopyDate = async () => {
+    await navigator.clipboard.writeText(
+        dateOutput.map(x => x.date).join("\n")
+    );
+
+    showToast("✓ Dates copied!");
+  };
+
+  const handleCopyTime = async () => {
+    await navigator.clipboard.writeText(
+        dateOutput.map(x => x.time).join("\n")
+    );
+
+    showToast("✓ Times copied!");
+  };
 
   return (
     <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
@@ -134,11 +153,18 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
         />
       </div>
       
-      <OutputArea
+      {/* <OutputArea
         title="Formatted Dates"
         value={dateOutput}
         onCopy={handleCopy}
-      />
+      /> */}
+
+      <DateAndTimeOutpurArea
+      title="Formatted Result"
+      value={dateOutput}
+      onCopyDate={handleCopyDate}
+      onCopyTime={handleCopyTime}
+    />
 
       <StatusFooter
         show={dateProcessedCount !== null && !!dateInput}

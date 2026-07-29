@@ -109,16 +109,18 @@ export const parseAndFormatDate = (
   dateTimeStr: string,
   inputFormat: InputDateFormat,
   outputFormat: OutputDateFormat
-): string => {
+): { date: string; time: string } => {
 
   const trimmed = dateTimeStr.trim();
 
   if (!trimmed) {
-    return '';
+    return {
+      date: '',
+      time: ''
+    };
   }
 
   const [datePart, rawTime = ''] = trimmed.split(/\s+/, 2);
-  const timePart = ensureTimeColon(rawTime);
 
   let date: Date | null = null;
 
@@ -140,12 +142,39 @@ export const parseAndFormatDate = (
   }
 
   if (!date || isNaN(date.getTime())) {
-    return `${trimmed} -> [Invalid Date]`;
+    return {
+      date: '[Invalid Date]',
+      time: ''
+    };
   }
 
   const formattedDate = formatDate(date, outputFormat);
 
-  return timePart
-    ? `${formattedDate} ${timePart}`
-    : formattedDate;
+  // Convert 1202 -> 12:02 PM
+  let formattedTime = '';
+
+  if (rawTime) {
+    const digits = rawTime.replace(/\D/g, '');
+
+    if (digits.length === 4) {
+      const hour = Number(digits.slice(0, 2));
+      const minute = Number(digits.slice(2));
+
+      const dt = new Date();
+      dt.setHours(hour, minute, 0, 0);
+
+      formattedTime = dt.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      });
+    } else {
+      formattedTime = ensureTimeColon(rawTime);
+    }
+  }
+
+  return {
+    date: formattedDate,
+    time: formattedTime
+  };
 };
