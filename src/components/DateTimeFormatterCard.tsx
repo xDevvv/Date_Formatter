@@ -57,28 +57,41 @@ export const DateTimeFormatterCard: React.FC<DateFormatterCardProps> = ({ showTo
   const handleDateProcess = useMemo(() => {
     return () => {
       if (!dateInput.trim()) return;
+
       setIsDateLoading(true);
+
       setTimeout(() => {
         const lines = dateInput.split('\n');
-        const processed = lines
-          .filter(line => line.trim())
-          .map(line => {
-              const normalizedLine = normalizeTime(line);
+        const processed = lines.map(line => {
+          // Preserve blank lines
+          if (!line.trim()) {
+            return {
+              date: '',
+              time: '',
+            };
+          }
 
-              const result = parseAndFormatDate(
-                  normalizedLine,
-                  inputFormat,
-                  outputFormat
-              );
+          const normalizedLine = normalizeTime(line);
 
-              return {
-                  date: result.date,
-                  time: result.time
-              };
-          });
-        // const processed = lines.map(line => line.trim() ? parseAndFormatDate(line, inputFormat, outputFormat) : '');
+          const result = parseAndFormatDate(
+            normalizedLine,
+            inputFormat,
+            outputFormat
+          );
+
+          return {
+            date: result.date,
+            time: result.time,
+          };
+        });
+
         setDateOutput(processed);
-        setDateProcessedCount(lines.filter(l => l.trim().length > 0).length);
+
+        // Count only actual dates, not blank lines
+        setDateProcessedCount(
+          lines.filter(line => line.trim().length > 0).length
+        );
+
         setIsDateLoading(false);
       }, 300);
     };

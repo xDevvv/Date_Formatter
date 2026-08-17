@@ -60,20 +60,27 @@ export const DateFormatterCard: React.FC<DateTimeFormatterCardProps> = ({
         setIsDateLoading(true);
 
         setTimeout(() => {
-            const lines = dateInput
-                .split('\n')
-                .filter(line => line.trim());
+            const lines = dateInput.split('\n');
 
-            const processed = lines.map(line => {
-                return parseAndFormatDateTime(
-                    line,
-                    inputFormat,
-                    outputFormat
-                );
-            });
+            const processed = lines
+                .map(line => {
+                    if (!line.trim()) {
+                        return '';
+                    }
 
-            // Convert string[] → single multiline string
-            setDateOutput(processed.join('\n'));
+                    return parseAndFormatDateTime(
+                        line,
+                        inputFormat,
+                        outputFormat
+                    );
+                })
+                .join('\n');
+
+            setDateOutput(processed);
+
+            setDateProcessedCount(
+                lines.filter(line => line.trim()).length
+            );
 
             setDateProcessedCount(lines.length);
             setIsDateLoading(false);
