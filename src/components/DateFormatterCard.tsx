@@ -33,20 +33,49 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
   const [isDateLoading, setIsDateLoading] = useState(false);
   const [dateProcessedCount, setDateProcessedCount] = useState<number | null>(null);
 
+  const normalizeTime = (line: string): string => {
+    return line.replace(
+        /\s(\d{3,4})(?:\s*([AaPp][Mm]))?$/,
+        (_, time, meridiem) => {
+            let normalizedTime = time;
+
+            // 830 → 0830
+            if (normalizedTime.length === 3) {
+                normalizedTime = `0${normalizedTime}`;
+            }
+
+            // If AM/PM exists, normalize it
+            if (meridiem) {
+                return ` ${normalizedTime} ${meridiem.toUpperCase()}`;
+            }
+
+            return ` ${normalizedTime}`;
+        }
+    );
+};
+
   const handleDateProcess = useMemo(() => {
     return () => {
       if (!dateInput.trim()) return;
       setIsDateLoading(true);
       setTimeout(() => {
         const lines = dateInput.split('\n');
-        const processed = lines.filter(line => line.trim()).map(line => {
-            const result = parseAndFormatDate(line, inputFormat, outputFormat);
-            return {
-                date: result.date,
-                time: result.time
-            };
-        });
+        const processed = lines
+          .filter(line => line.trim())
+          .map(line => {
+              const normalizedLine = normalizeTime(line);
 
+              const result = parseAndFormatDate(
+                  normalizedLine,
+                  inputFormat,
+                  outputFormat
+              );
+
+              return {
+                  date: result.date,
+                  time: result.time
+              };
+          });
         // const processed = lines.map(line => line.trim() ? parseAndFormatDate(line, inputFormat, outputFormat) : '');
         setDateOutput(processed);
         setDateProcessedCount(lines.filter(l => l.trim().length > 0).length);
@@ -153,18 +182,13 @@ export const DateFormatterCard: React.FC<DateFormatterCardProps> = ({ showToast 
         />
       </div>
       
-      {/* <OutputArea
-        title="Formatted Dates"
-        value={dateOutput}
-        onCopy={handleCopy}
-      /> */}
 
       <DateAndTimeOutpurArea
-      title="Formatted Result"
-      value={dateOutput}
-      onCopyDate={handleCopyDate}
-      onCopyTime={handleCopyTime}
-    />
+        title="Formatted Result"
+        value={dateOutput}
+        onCopyDate={handleCopyDate}
+        onCopyTime={handleCopyTime}
+      />
 
       <StatusFooter
         show={dateProcessedCount !== null && !!dateInput}

@@ -47,7 +47,7 @@ export const DateAndTimeOutpurArea: React.FC<DateOutputAreaProps> = ({
           <textarea
             readOnly
             value={value.map(v => v.date).join('\n')}
-            className="w-full h-44 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 font-mono text-sm resize-none"
+            className="w-full h-44 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 font-mono text-sm text-slate-700 dark:text-slate-300 resize-none"
           />
         </div>
 

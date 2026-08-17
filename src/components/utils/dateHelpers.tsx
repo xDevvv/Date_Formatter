@@ -25,24 +25,6 @@ const MONTHS_LONG = [
 
 const pad = (num: number) => String(num).padStart(2, '0');
 
-const ensureTimeColon = (time: string): string => {
-  const clean = time.trim();
-
-  if (clean.includes(':') || isNaN(Number(clean))) {
-    return clean;
-  }
-
-  switch (clean.length) {
-    case 4:
-      return `${clean.slice(0, 2)}:${clean.slice(2)}`;
-
-    case 3:
-      return `0${clean[0]}:${clean.slice(1)}`;
-
-    default:
-      return clean;
-  }
-};
 
 const tryParseDate = (value: string): Date | null => {
   const timestamp = Date.parse(value);
@@ -120,7 +102,11 @@ export const parseAndFormatDate = (
     };
   }
 
-  const [datePart, rawTime = ''] = trimmed.split(/\s+/, 2);
+  const parts = trimmed.split(/\s+/);
+
+  const datePart = parts[0];
+  const rawTime = parts[1] ?? '';
+  const meridiem = parts[2] ?? '';
 
   let date: Date | null = null;
 
@@ -154,27 +140,78 @@ export const parseAndFormatDate = (
   let formattedTime = '';
 
   if (rawTime) {
-    const digits = rawTime.replace(/\D/g, '');
-
-    if (digits.length === 4) {
-      const hour = Number(digits.slice(0, 2));
-      const minute = Number(digits.slice(2));
-
-      const dt = new Date();
-      dt.setHours(hour, minute, 0, 0);
-
-      formattedTime = dt.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-      });
-    } else {
-      formattedTime = ensureTimeColon(rawTime);
-    }
+    formattedTime = formatTime(rawTime, meridiem);
   }
 
   return {
     date: formattedDate,
     time: formattedTime
   };
+};
+
+const formatTime = (rawTime: string, meridiem?: string): string => {
+  const clean = rawTime.trim();
+
+  if (!clean) {
+    return '';
+  }
+
+  // Remove colon so we can normalize:
+  // 8:30  -> 830
+  // 08:30 -> 0830
+  const digits = clean.replace(':', '');
+
+  if (!/^\d{3,4}$/.test(digits)) {
+    return clean;
+  }
+
+  let hour: number;
+  let minute: number;
+
+  // 830 -> 08:30
+  if (digits.length === 3) {
+    hour = Number(digits.slice(0, 1));
+    minute = Number(digits.slice(1));
+  } else {
+    // 0830 -> 08:30
+    // 1230 -> 12:30
+    hour = Number(digits.slice(0, 2));
+    minute = Number(digits.slice(2));
+  }
+
+  // Validate minutes
+  if (minute > 59) {
+    return '[Invalid Time]';
+  }
+
+  // Handle AM / PM
+  if (meridiem) {
+    const period = meridiem.toUpperCase();
+
+    if (period !== 'AM' && period !== 'PM') {
+      return '[Invalid Time]';
+    }
+
+    // 12 AM = 00:xx
+    // 12 PM = 12:xx
+    if (hour < 1 || hour > 12) {
+      return '[Invalid Time]';
+    }
+
+    return `${hour}:${pad(minute)} ${period}`;
+  }
+
+  // No AM/PM = 24-hour format
+  if (hour > 23) {
+    return '[Invalid Time]';
+  }
+
+  const dt = new Date();
+  dt.setHours(hour, minute, 0, 0);
+
+  return dt.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
 };
