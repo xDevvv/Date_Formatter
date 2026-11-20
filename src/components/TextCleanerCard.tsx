@@ -111,11 +111,14 @@ export const TextCleanerCard: React.FC<TextCleanerCardProps> = ({ showToast }) =
   };
   
   return (
-    <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
+    <section className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
       <div>
         <div className="flex flex-col gap-1 mb-6">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Remove Spaces & Dashes</h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+          <h2 className="text-xl font-semibold text-slate-900">
+            Remove Spaces & Dashes
+          </h2>
+
+          <p className="text-xs text-slate-500 leading-relaxed">
             Remove spaces and hyphens from IDs, document numbers, product codes, and similar raw tracking strings.
           </p>
         </div>
@@ -127,12 +130,10 @@ export const TextCleanerCard: React.FC<TextCleanerCardProps> = ({ showToast }) =
           disableClear={!textInput}
         />
 
-
-
         <TextInputArea
           id="text-input-area"
           value={textInput}
-          placeholder={`Example: PASU 9099-2012-21`}
+          placeholder="Example: PASU 9099-2012-21"
           onChange={setTextInput}
           enableDragDrop
           isDragActive={isTextDragActive}

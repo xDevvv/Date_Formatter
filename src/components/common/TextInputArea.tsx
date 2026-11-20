@@ -37,13 +37,14 @@ export const TextInputArea: React.FC<TextInputAreaProps> = ({
       placeholder={placeholder}
       onChange={(e) => onChange(e.target.value)}
       rows={rows}
-      className="w-full bg-transparent p-4 font-mono text-sm text-slate-800 dark:text-slate-200 focus:outline-none resize-none"
+      className="w-full bg-transparent p-4 font-mono text-sm text-slate-800 focus:outline-none resize-none"
     />
+
   );
 
   if (!enableDragDrop) {
     return (
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl">
+      <div className="border border-slate-200 rounded-xl">
         {textarea}
       </div>
     );
@@ -54,7 +55,7 @@ export const TextInputArea: React.FC<TextInputAreaProps> = ({
       className={`relative rounded-xl border-2 transition-all ${
         isDragActive
           ? 'border-blue-500 bg-blue-50/30'
-          : 'border-slate-200 dark:border-slate-800'
+          : 'border-slate-200'
       }`}
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}

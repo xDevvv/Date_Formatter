@@ -128,15 +128,14 @@ export const DateFormatterCard: React.FC<DateTimeFormatterCardProps> = ({
     };
 
   return (
-    <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
-
+    <section className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
       <div>
         <div className="flex flex-col gap-1 mb-6">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+          <h2 className="text-xl font-semibold text-slate-900">
             Date & Time Formatter
           </h2>
 
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+          <p className="text-xs text-slate-500 leading-relaxed">
             Convert multi-line date and time values while keeping the date and
             time together.
           </p>
@@ -161,12 +160,12 @@ export const DateFormatterCard: React.FC<DateTimeFormatterCardProps> = ({
 
           {/* Input Format */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
               Input Format
             </label>
 
             <select
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 focus:outline-none"
+              className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700 focus:outline-none"
               value={inputFormat}
               onChange={e =>
                 setInputFormat(e.target.value as InputDateFormat)
@@ -182,12 +181,12 @@ export const DateFormatterCard: React.FC<DateTimeFormatterCardProps> = ({
 
           {/* Output Format */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
               Output Format
             </label>
 
             <select
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 focus:outline-none"
+              className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700 focus:outline-none"
               value={outputFormat}
               onChange={e =>
                 setOutputFormat(

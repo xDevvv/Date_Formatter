@@ -140,11 +140,14 @@ export const DateTimeFormatterCard: React.FC<DateFormatterCardProps> = ({ showTo
   };
 
   return (
-    <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
+    <section className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
       <div>
         <div className="flex flex-col gap-1 mb-6">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Date & Time Format Converter (Separate)</h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+          <h2 className="text-xl font-semibold text-slate-900">
+            Date & Time Format Converter (Separate)
+          </h2>
+
+          <p className="text-xs text-slate-500 leading-relaxed">
             Convert multi-line date values directly into preferred standardized format syntax.
           </p>
         </div>
@@ -157,27 +160,42 @@ export const DateTimeFormatterCard: React.FC<DateFormatterCardProps> = ({ showTo
         />
 
         <TextInputArea
-            id="date-input-area"
-            value={dateInput}
-            placeholder={`Example: Jan-21-2026 1212`}
-            onChange={setDateInput}
-            rows={6}
-          />
+          id="date-input-area"
+          value={dateInput}
+          placeholder="Example: Jan-21-2026 1212"
+          onChange={setDateInput}
+          rows={6}
+        />
 
         <div className="grid grid-cols-2 gap-3 mt-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Input Format</label>
-            <select className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 focus:outline-none" value={inputFormat} onChange={(e) => setInputFormat(e.target.value as InputDateFormat)}>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              Input Format
+            </label>
+
+            <select
+              className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700 focus:outline-none"
+              value={inputFormat}
+              onChange={(e) => setInputFormat(e.target.value as InputDateFormat)}
+            >
               {INPUT_FORMATS.map(format => (
-                  <option key={format} value={format}>
-                      {format}
-                  </option>
+                <option key={format} value={format}>
+                  {format}
+                </option>
               ))}
             </select>
           </div>
+
           <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Output Format</label>
-            <select className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 focus:outline-none" value={outputFormat} onChange={(e) => setOutputFormat(e.target.value as OutputDateFormat)}>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              Output Format
+            </label>
+
+            <select
+              className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700 focus:outline-none"
+              value={outputFormat}
+              onChange={(e) => setOutputFormat(e.target.value as OutputDateFormat)}
+            >
               {INPUT_FORMATS_NO_AUTO.map(format => (
                 <option key={format} value={format}>
                   {format}
@@ -194,7 +212,6 @@ export const DateTimeFormatterCard: React.FC<DateFormatterCardProps> = ({ showTo
           onClick={handleDateProcess}
         />
       </div>
-      
 
       <DateAndTimeOutpurArea
         title="Formatted Result"

@@ -17,11 +17,11 @@ export const InputToolbar: React.FC<InputToolbarProps> = ({
   return (
     <div className="flex items-center justify-between mb-2 text-xs">
       <div className="flex items-center gap-2">
-        <span className="font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        <span className="font-semibold uppercase tracking-wider text-slate-400">
           Input
         </span>
 
-        <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-mono text-slate-600 dark:text-slate-400">
+        <span className="px-2 py-0.5 rounded-full bg-slate-100 font-mono text-slate-600">
           Lines: {lineCount}
         </span>
       </div>
@@ -29,7 +29,7 @@ export const InputToolbar: React.FC<InputToolbarProps> = ({
       <div className="flex items-center gap-1.5">
         <button
           onClick={onPaste}
-          className="flex items-center gap-1 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-slate-600 dark:text-slate-300 transition-all"
+          className="flex items-center gap-1 px-2.5 py-1 rounded-md border border-slate-200 hover:bg-slate-50 font-medium text-slate-600 transition-all"
         >
           <Clipboard size={12} />
           Paste
@@ -38,7 +38,7 @@ export const InputToolbar: React.FC<InputToolbarProps> = ({
         <button
           onClick={onClear}
           disabled={disableClear}
-          className="flex items-center gap-1 px-2.5 py-1 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 font-medium transition-all disabled:opacity-45"
+          className="flex items-center gap-1 px-2.5 py-1 text-red-600 hover:bg-red-50 font-medium transition-all disabled:opacity-45"
         >
           <Trash2 size={12} />
           Clear
