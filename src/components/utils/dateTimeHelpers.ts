@@ -129,7 +129,7 @@ export const parseAndFormatDate = (
 
   if (!date || isNaN(date.getTime())) {
     return {
-      date: '[Invalid Date]',
+      date: '',
       time: ''
     };
   }

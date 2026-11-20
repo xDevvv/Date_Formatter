@@ -19,7 +19,7 @@ export const parseAndFormatDateTime = (
   );
 
   if (result.date === '[Invalid Date]') {
-    return '[Invalid Date]';
+    return '';
   }
 
   if (!result.time) {
